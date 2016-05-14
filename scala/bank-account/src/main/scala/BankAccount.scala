@@ -13,7 +13,7 @@ case class BankAccount() {
   }
 
   def incrementBalance(i: Int) = {
-    if (!closed) account += i
+    if (!closed) this.synchronized { account += i }
     getBalance
   }
 

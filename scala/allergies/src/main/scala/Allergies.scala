@@ -7,13 +7,14 @@ case class Allergies() {
 
   def allergies(i: Int) = {
     @annotation.tailrec
-    def go(marker:Int, allergies:List[(Option[Allergen],Int)], acc:List[Allergen]):List[Allergen] =  allergies match {
-      case (a,j) :: t if marker >= j  => go(marker - j, t, if (a.nonEmpty) a.get :: acc else acc)
-      case (a,j) :: t if marker < j => go(marker, t, acc)
-      case Nil => acc
-    }
-    //println(Allergen.allergies)
-    go(i,Allergen.allergies, List())
+    def go(marker:Int, allergies:List[(Option[Allergen],Int)], acc:List[Allergen]):List[Allergen] =
+      allergies match {
+        case (a,j) :: t if marker >= j  => go(marker - j, t, if (a.nonEmpty) a.get :: acc else acc)
+        case (a,j) :: t if marker < j => go(marker, t, acc)
+        case Nil => acc
+      }
+      //println(Allergen.allergies)
+      go(i,Allergen.allergies, List())
   }
 
   def isAllergicTo(allergy:Allergen, i: Int) = allergies(i).contains(allergy)
