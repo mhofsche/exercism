@@ -4,41 +4,22 @@
 object Minesweeper {
 
   def annotate(list: List[String]) : List[String] = {
-
     if (list.isEmpty) return list
-
-    var matrix = list.map(_.toList)
-
-    matrix.indices.map(i => matrix(i).indices.map(j => numNeighboringMines(i,j,matrix)).mkString).toList
-
+    val matrix = list.map(_.toList)
+    matrix.indices.map(i => matrix(i).indices.map(j => calcCells(i,j,matrix)).mkString).toList
   }
 
-  def numNeighboringMines(x:Int,y:Int,list:List[List[Char]]) : String = {
-
-    if (isBomb(x,y,list)) return "*"
-
-    var ys = list.length
-    var xs = list.head.length
-
-    var counter = 0
-
-    if (isBomb(x-1,y-1,list)) counter = counter+1
-    if (isBomb(x-1,y,list)) counter = counter+1
-    if (isBomb(x-1,y+1,list)) counter = counter+1
-    if (isBomb(x,y-1,list)) counter = counter+1
-
-    if (isBomb(x,y+1,list)) counter = counter+1
-    if (isBomb(x+1,y-1,list)) counter = counter+1
-    if (isBomb(x+1,y,list)) counter = counter+1
-    if (isBomb(x+1,y+1,list)) counter = counter+1
-
-    if (counter == 0 ) return " "
-    counter.toString
-  }
-
-  def isBomb(x:Int,y:Int,list:List[List[Char]]):Boolean = {
-    var xs = list.length
-    var ys = list.head.length
-    (x >= 0 && x < xs && y >= 0 && y < ys) && list(x)(y)=='*'
+  private def calcCells(x: Int, y: Int, matrix:List[List[Char]]): String = {
+    if (matrix(x)(y) == '*') return "*"
+    val s = (
+        for {
+          i <- x-1 to x+1
+          if i >= 0 && i < matrix.length
+          j <- y-1 to y+1
+          if j >= 0 && j < matrix.head.length
+        } yield if (matrix(i)(j) == '*') 1 else 0
+      ).sum
+    if (s == 0) " "
+    else s.toString
   }
 }

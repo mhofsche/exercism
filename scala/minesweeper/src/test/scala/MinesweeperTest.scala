@@ -64,4 +64,5 @@ class MinesweeperTest extends FlatSpec with Matchers {
                  "25*52",
                  " 2*2 "))
   }
+
 }
